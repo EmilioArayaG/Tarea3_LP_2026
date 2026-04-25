@@ -11,7 +11,7 @@ public abstract class Enemigo {
     public abstract void atacar(Jugador cloud);
 
     public void giveXpRecompensa(Jugador cloud){
-        cloud.recibirXp(this.xpRecompensa);
+        cloud.recibirXP(this.xpRecompensa);
     }
     public String getNombre() { return nombre; }
     public Estadisticas getStats() { return stats; }

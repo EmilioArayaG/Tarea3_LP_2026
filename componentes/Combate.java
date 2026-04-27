@@ -1,0 +1,242 @@
+package componentes;
+
+import entidades.Enemigo;
+import entidades.Jugador;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+/**
+ * Gestiona el bucle de combate por turnos entre Cloud y uno o mas enemigos.
+ * Muestra el estado del jugador, ofrece un menu de acciones y alterna turnos
+ * hasta que todos los enemigos mueran o Cloud sea derrotado.
+ */
+public class Combate {
+
+    private final Jugador cloud;
+    private final List<Enemigo> enemigos;
+    private final boolean puedeHuir;
+    private final Scanner scanner;
+
+    /**
+     * Crea una instancia de combate.
+     *
+     * @param cloud     el jugador
+     * @param enemigos  lista de enemigos que participan
+     * @param puedeHuir false en NucleoPlaneta (combate obligatorio)
+     * @param scanner   Scanner compartido para leer entrada del usuario
+     */
+    public Combate(Jugador cloud, List<Enemigo> enemigos, boolean puedeHuir, Scanner scanner) {
+        this.cloud = cloud;
+        this.enemigos = enemigos;
+        this.puedeHuir = puedeHuir;
+        this.scanner = scanner;
+    }
+
+    /**
+     * Ejecuta el bucle de combate completo.
+     *
+     * @return true si Cloud sobrevivio (gano o huyo), false si fue derrotado
+     */
+    public boolean iniciar() {
+        System.out.println("\n=== COMBATE INICIADO ===");
+        for (Enemigo e : enemigos) {
+            System.out.println("  - " + e.getNombre()
+                    + " (HP: " + e.getStats().getHpActual() + ")");
+        }
+
+        while (hayEnemigosVivos() && cloud.getStats().getHpActual() > 0) {
+            mostrarEstado();
+            boolean huyo = turnoJugador();
+            if (huyo) return true;
+
+            if (!hayEnemigosVivos()) break;
+
+            turnoEnemigos();
+
+            if (cloud.getStats().getHpActual() <= 0) {
+                System.out.println("\nCloud ha sido derrotado...");
+                return false;
+            }
+        }
+
+        if (hayEnemigosVivos()) return false;
+
+        System.out.println("\n=== VICTORIA! ===");
+        darRecompensas();
+        return true;
+    }
+
+    /**
+     * Muestra el estado actual de Cloud y de los enemigos vivos.
+     */
+    private void mostrarEstado() {
+        System.out.println("\n--- Estado de " + cloud.getNombre() + " ---");
+        System.out.println("  HP: " + cloud.getStats().getHpActual()
+                + "/" + cloud.getStats().getHpMaximo());
+        System.out.println("  MP: " + cloud.getStats().getMpActual()
+                + "/" + cloud.getStats().getMpMaximo());
+        System.out.println("  Limite: " + cloud.getLimiteActual() + "/100");
+        System.out.println("--- Enemigos ---");
+        for (Enemigo e : enemigos) {
+            if (e.getStats().getHpActual() > 0) {
+                System.out.println("  " + e.getNombre()
+                        + " HP: " + e.getStats().getHpActual());
+            }
+        }
+    }
+
+    /**
+     * Gestiona el turno del jugador mostrando el menu y ejecutando la accion elegida.
+     *
+     * @return true si el jugador eligio huir exitosamente
+     */
+    private boolean turnoJugador() {
+        Enemigo objetivo = primerEnemigoVivo();
+        boolean tieneMagia = !cloud.getBusterSword().getMateriasEquipadas().isEmpty();
+
+        System.out.println("\nAcciones:");
+        System.out.println("  1) Ataque fisico");
+        if (tieneMagia)                    System.out.println("  2) Magia");
+        if (cloud.getLimiteActual() >= 100) System.out.println("  3) Ataque Limite!");
+        if (puedeHuir)                     System.out.println("  4) Huir");
+        System.out.print("Elige: ");
+
+        String input = scanner.nextLine().trim();
+
+        switch (input) {
+            case "1":
+                cloud.atacarFisico(objetivo);
+                return false;
+            case "2":
+                if (!tieneMagia) {
+                    System.out.println("Opcion invalida.");
+                    return turnoJugador();
+                }
+                return menuMagia(objetivo);
+            case "3":
+                if (cloud.getLimiteActual() < 100) {
+                    System.out.println("Opcion invalida.");
+                    return turnoJugador();
+                }
+                cloud.usarAtaqueLimite(objetivo);
+                return false;
+            case "4":
+                if (!puedeHuir) {
+                    System.out.println("No puedes huir de este combate!");
+                    return turnoJugador();
+                }
+                return intentarHuir();
+            default:
+                System.out.println("Opcion invalida.");
+                return turnoJugador();
+        }
+    }
+
+    /**
+     * Muestra el submenu de materias disponibles y ejecuta el hechizo elegido.
+     *
+     * @param objetivo el enemigo sobre el que se lanza la magia
+     * @return false siempre (la magia no termina el combate)
+     */
+    private boolean menuMagia(Enemigo objetivo) {
+        List<Materia> materias = cloud.getBusterSword().getMateriasEquipadas();
+        System.out.println("Que magia usas?");
+        for (int i = 0; i < materias.size(); i++) {
+            Materia m = materias.get(i);
+            int costo = cloud.getBusterSword().costoMP(m.getElemento());
+            System.out.println("  " + (i + 1) + ") " + m.getNombre()
+                    + " [" + m.getElemento() + "] (Costo: " + costo + " MP)");
+        }
+        System.out.println("  0) Volver");
+        System.out.print("Elige: ");
+        String input = scanner.nextLine().trim();
+
+        if (input.equals("0")) return turnoJugador();
+
+        try {
+            int idx = Integer.parseInt(input) - 1;
+            if (idx < 0 || idx >= materias.size()) {
+                System.out.println("Opcion invalida.");
+                return menuMagia(objetivo);
+            }
+            Materia elegida = materias.get(idx);
+            if (elegida.getElemento() == Elemento.CURA) {
+                cloud.curar();
+            } else {
+                cloud.lanzarMagia(elegida.getElemento(), objetivo);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Opcion invalida.");
+            return menuMagia(objetivo);
+        }
+        return false;
+    }
+
+    /**
+     * Intenta huir del combate con 50% de probabilidad de exito.
+     *
+     * @return true si Cloud huyo, false si fallo el intento
+     */
+    private boolean intentarHuir() {
+        if (new Random().nextBoolean()) {
+            System.out.println("Cloud huye del combate!");
+            return true;
+        }
+        System.out.println("No pudiste escapar!");
+        return false;
+    }
+
+    /**
+     * Ejecuta el ataque de cada enemigo vivo sobre Cloud.
+     */
+    private void turnoEnemigos() {
+        for (Enemigo e : enemigos) {
+            if (e.getStats().getHpActual() > 0 && cloud.getStats().getHpActual() > 0) {
+                e.atacar(cloud);
+            }
+        }
+    }
+
+    /**
+     * Entrega XP y chatarra de cada enemigo derrotado al jugador.
+     */
+    private void darRecompensas() {
+        for (Enemigo e : enemigos) {
+            int xp = e.getXpRecompensa();
+            int chatarra = e.getChatarraRecompensa();
+            if (xp > 0) {
+                System.out.println("Obtienes " + xp + " XP de " + e.getNombre() + ".");
+                cloud.recibirXP(xp);
+            }
+            if (chatarra > 0) {
+                System.out.println("Obtienes " + chatarra + " chatarra de " + e.getNombre() + ".");
+                cloud.recibirChatarra(chatarra);
+            }
+        }
+    }
+
+    /**
+     * Indica si al menos un enemigo de la lista sigue con HP mayor que cero.
+     *
+     * @return true si hay al menos un enemigo vivo
+     */
+    private boolean hayEnemigosVivos() {
+        for (Enemigo e : enemigos) {
+            if (e.getStats().getHpActual() > 0) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Retorna el primer enemigo de la lista que aun tiene HP mayor que cero.
+     *
+     * @return el primer Enemigo vivo
+     */
+    private Enemigo primerEnemigoVivo() {
+        for (Enemigo e : enemigos) {
+            if (e.getStats().getHpActual() > 0) return e;
+        }
+        return enemigos.get(0);
+    }
+}

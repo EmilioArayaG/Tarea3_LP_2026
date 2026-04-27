@@ -65,4 +65,6 @@ public class Sephiroth extends Enemigo {
     public int getContadorSuperNova() {
         return contadorSuperNova;
     }
+
+    public void resetContadorSuperNova() { this.contadorSuperNova = 0; }
 }

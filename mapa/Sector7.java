@@ -31,8 +31,8 @@ public class Sector7 extends Zona {
         this.scanner = scanner;
         this.tiendaLocal = new ArrayList<>();
         this.tiendaLocal.add(new Mejora("Mejora de Vitalidad",  100, TipoStat.HP_MAX,  20));
-        this.tiendaLocal.add(new Mejora("Mejora de Concentracion", 80, TipoStat.MP_MAX, 15));
-        this.tiendaLocal.add(new Mejora("Mejora de Fuerza",     120, TipoStat.FUERZA,   5));
+        this.tiendaLocal.add(new Mejora("Mejora de Eter",       120, TipoStat.MP_MAX,  10));
+        this.tiendaLocal.add(new Mejora("Mejora de Fuerza",     150, TipoStat.FUERZA,  10));
     }
 
     /**
@@ -75,7 +75,8 @@ public class Sector7 extends Zona {
         Combate combate = new Combate(cloud, grupo, true, scanner);
         boolean sobrevivio = combate.iniciar();
         if (!sobrevivio) {
-            cloud.morir();
+            cloud.getStats().setHpActual(1);
+            System.out.println("El simulador termina. Cloud queda con 1 HP, sin penalización.");
         }
     }
 

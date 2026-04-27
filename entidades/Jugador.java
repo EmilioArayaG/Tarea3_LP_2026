@@ -144,6 +144,10 @@ public class Jugador {
                 + enemigo.getNombre() + " causando " + dano + " de dano! ***");
         enemigo.getStats().recibirDMG(dano);
         this.limiteActual = 0;
+        if (enemigo instanceof entidades.Sephiroth) {
+            ((entidades.Sephiroth) enemigo).resetContadorSuperNova();
+            System.out.println("El contador de SuperNova de Sephiroth ha sido reiniciado!");
+        }
     }
 
     /**

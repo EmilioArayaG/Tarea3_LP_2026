@@ -2,6 +2,7 @@ package componentes;
 
 import entidades.Enemigo;
 import entidades.Jugador;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -188,13 +189,34 @@ public class Combate {
     }
 
     /**
-     * Ejecuta el ataque de cada enemigo vivo sobre Cloud.
+     * Ejecuta el ataque de los enemigos vivos sobre Cloud.
+     * Si hay 1 enemigo, ataca siempre. Con 2 hay 50% de ataque conjunto;
+     * con 3 hay 33%; si no atacan juntos, ataca solo uno aleatorio.
      */
     private void turnoEnemigos() {
+        List<Enemigo> vivos = new ArrayList<>();
         for (Enemigo e : enemigos) {
-            if (e.getStats().getHpActual() > 0 && cloud.getStats().getHpActual() > 0) {
-                e.atacar(cloud);
+            if (e.getStats().getHpActual() > 0) vivos.add(e);
+        }
+        if (vivos.isEmpty()) return;
+
+        int n = vivos.size();
+        boolean ataquenJuntos;
+        if (n == 1) {
+            ataquenJuntos = true;
+        } else if (n == 2) {
+            ataquenJuntos = new Random().nextInt(100) < 50;
+        } else {
+            ataquenJuntos = new Random().nextInt(100) < 33;
+        }
+
+        if (ataquenJuntos) {
+            for (Enemigo e : vivos) {
+                if (cloud.getStats().getHpActual() > 0) e.atacar(cloud);
             }
+        } else {
+            Enemigo atacante = vivos.get(new Random().nextInt(vivos.size()));
+            atacante.atacar(cloud);
         }
     }
 

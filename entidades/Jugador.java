@@ -1,8 +1,8 @@
 package entidades;
 
+import componentes.Elemento;
 import componentes.Estadisticas;
 import componentes.Materia;
-import componentes.Elemento;
 import componentes.Vulnerable;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +69,7 @@ public class Jugador {
      */
     public void atacarFisico(Enemigo enemigo) {
         int dano = busterSword.calcularDanoFisico();
-        System.out.println(nombre + " ataca fisicamente a " + enemigo.getNombre()
-                + " causando " + dano + " de dano.");
+        System.out.println(nombre + " ataca fisicamente a " + enemigo.getNombre() + " causando " + dano + " de dano.");
         enemigo.getStats().recibirDMG(dano);
         cargarLimite(dano / 5);
     }

@@ -51,7 +51,7 @@ public class Combate {
             turnoEnemigos();
 
             if (cloud.getStats().getHpActual() <= 0) {
-                System.out.println("\nCloud ha sido derrotado...");
+                System.out.println("\nCloud ha sido derrotado... :(");
                 return false;
             }
         }
@@ -94,7 +94,7 @@ public class Combate {
         System.out.println("\nAcciones:");
         System.out.println("  1) Ataque fisico");
         if (tieneMagia)                     System.out.println("  2) Magia");
-        if (cloud.getLimiteActual() >= 100)  System.out.println("  3) Ataque Limite!");
+        if (cloud.getLimiteActual() >= 100)  System.out.println("  3) Ataque Limite");
         if (puedeHuir)                       System.out.println("  4) Huir");
         System.out.print("Elige: ");
 
@@ -106,13 +106,13 @@ public class Combate {
                 return false;
             case "2":
                 if (!tieneMagia) {
-                    System.out.println("Opcion invalida.");
+                    System.out.println("Opcion invalida ");
                     return turnoJugador();
                 }
                 return menuMagia(objetivo);
             case "3":
                 if (cloud.getLimiteActual() < 100) {
-                    System.out.println("Opcion invalida.");
+                    System.out.println("Opcion invalida ");
                     return turnoJugador();
                 }
                 cloud.usarAtaqueLimite(objetivo);
@@ -124,7 +124,7 @@ public class Combate {
                 }
                 return intentarHuir();
             default:
-                System.out.println("Opcion invalida.");
+                System.out.println("Opcion invalida ");
                 return turnoJugador();
         }
     }
@@ -153,7 +153,7 @@ public class Combate {
         try {
             int idx = Integer.parseInt(input) - 1;
             if (idx < 0 || idx >= materias.size()) {
-                System.out.println("Opcion invalida.");
+                System.out.println("Opcion invalida ");
                 return menuMagia(objetivo);
             }
             Materia elegida = materias.get(idx);
@@ -163,7 +163,7 @@ public class Combate {
                 cloud.lanzarMagia(elegida.getElemento(), objetivo);
             }
         } catch (NumberFormatException e) {
-            System.out.println("Opcion invalida.");
+            System.out.println("Opcion invalida ");
             return menuMagia(objetivo);
         }
         return false;

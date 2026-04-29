@@ -3,14 +3,12 @@ package entidades;
 import componentes.Estadisticas;
 import java.util.Random;
 
-/**
- * Enemigo de entrenamiento disponible en el simulador del Sector 7.
- * No otorga chatarra, pero si una pequena cantidad de XP aleatoria.
- */
 public class EnemigoSimulador extends Enemigo {
 
     /**
      * Crea un Soldado comun con HP 50, Fuerza 15 y XP aleatoria entre 15 y 20.
+     *
+     * @param void
      */
     public EnemigoSimulador() {
         this.nombre = "Soldado comun";
@@ -21,8 +19,7 @@ public class EnemigoSimulador extends Enemigo {
 
     /**
      * Ataca al jugador con 85% de precision. El dano es piso(Fuerza * 1.25).
-     * Nunca mata al jugador: si el golpe lo dejaria en 0 HP o menos, se reduce
-     * para dejar exactamente 1 HP.
+     * Nunca reduce el HP de Cloud por debajo de 1.
      *
      * @param cloud el jugador que recibe el ataque
      */

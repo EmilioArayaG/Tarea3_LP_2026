@@ -7,10 +7,6 @@ import componentes.Vulnerable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Representa a Cloud Strife, el jugador principal. Gestiona su inventario,
- * estadisticas, barra de limite y progresion de nivel.
- */
 public class Jugador {
     private String nombre;
     private int nivel;
@@ -21,7 +17,11 @@ public class Jugador {
     private final List<Materia> mochila;
     private final Arma busterSword;
 
-    /** Crea a Cloud con sus valores iniciales de nivel 1. */
+    /**
+     * Crea a Cloud con sus valores iniciales de nivel 1.
+     *
+     * @param void
+     */
     public Jugador() {
         this.nombre = "Cloud";
         this.nivel = 1;
@@ -49,7 +49,9 @@ public class Jugador {
     }
 
     /**
-     * Incrementa el nivel y mejora las estadisticas base.
+     * Incrementa el nivel y mejora las estadisticas base en +10 HP, +5 MP, +4 Fuerza, +6 Magia.
+     *
+     * @param void
      */
     private void subirNivel() {
         this.nivel++;
@@ -61,8 +63,7 @@ public class Jugador {
     }
 
     /**
-     * Realiza un ataque fisico sobre un enemigo. El dano es piso(Fuerza*1.25).
-     * Carga la barra de limite con piso(dano/5).
+     * Realiza un ataque fisico sobre un enemigo con dano piso(Fuerza*1.25) y carga la barra de limite.
      *
      * @param enemigo el enemigo objetivo
      */
@@ -76,8 +77,7 @@ public class Jugador {
 
     /**
      * Lanza un hechizo magico sobre un enemigo si Cloud tiene suficiente MP.
-     * El dano se multiplica por el factor de debilidad del enemigo si implementa Vulnerable.
-     * Carga la barra de limite con piso(danoFinal/5).
+     * El dano base se multiplica por el factor de debilidad del enemigo si implementa Vulnerable.
      *
      * @param elemento el elemento del hechizo
      * @param enemigo  el enemigo objetivo
@@ -107,8 +107,10 @@ public class Jugador {
     }
 
     /**
-     * Usa un hechizo de CURA sobre si mismo, recuperando HP en funcion de la magia.
-     * Requiere que el arma tenga materia de CURA y suficiente MP.
+     * Usa el elemento CURA sobre Cloud mismo, recuperando HP segun la formula magica.
+     * Requiere materia de CURA equipada y suficiente MP. No supera el HP maximo.
+     *
+     * @param void
      */
     public void curar() {
         if (!busterSword.tieneElemento(Elemento.CURA)) {
@@ -130,7 +132,8 @@ public class Jugador {
 
     /**
      * Usa el ataque de limite sobre un enemigo si la barra esta llena (>= 100).
-     * Resetea la barra a 0 tras el uso.
+     * El dano es Fuerza*5 e ignora multiplicadores. Resetea la barra a 0.
+     * Si el objetivo es Sephiroth, reinicia su contador de SuperNova.
      *
      * @param enemigo el enemigo objetivo
      */
@@ -161,8 +164,9 @@ public class Jugador {
     }
 
     /**
-     * Aplica la penalizacion de muerte: vacia mochila y chatarra, restaura HP y MP,
-     * y muestra un mensaje de retorno al Sector 7.
+     * Aplica la penalizacion de muerte: vacia mochila y chatarra, restaura HP y MP al maximo.
+     *
+     * @param void
      */
     public void morir() {
         System.out.println("\n" + nombre + " ha caido en batalla...");
@@ -203,25 +207,26 @@ public class Jugador {
     public List<Materia> getMochila()            { return mochila; }
     public Arma getBusterSword()                 { return busterSword; }
 
-    /**
-     * Clase anidada que representa el arma Buster Sword de Cloud.
-     * Gestiona las materias equipadas y calcula el dano de cada tipo de ataque.
-     */
     public class Arma {
         private final String nombre;
         private final List<Materia> materiasEquipadas;
 
-        /** Crea la Buster Sword sin materias equipadas. */
+        /**
+         * Crea la Buster Sword sin materias equipadas.
+         *
+         * @param void
+         */
         public Arma() {
             this.nombre = "Buster Sword";
             this.materiasEquipadas = new ArrayList<>();
         }
 
         /**
-         * Calcula el dano magico base para un elemento segun la cantidad de materias de ese tipo.
+         * Calcula el dano magico base para un elemento segun la cantidad de materias de ese tipo equipadas.
+         * Formula: piso(Magia * (1 + 0.5 * n)).
          *
          * @param elemento el elemento del hechizo
-         * @return dano magico calculado
+         * @return dano magico base calculado
          */
         public int calcularDanoMagico(Elemento elemento) {
             int n = contarMateriasElemento(elemento);
@@ -229,25 +234,26 @@ public class Jugador {
         }
 
         /**
-         * Calcula el dano de un ataque fisico normal.
+         * Calcula el dano de un ataque fisico normal. Formula: piso(Fuerza * 1.25).
          *
-         * @return dano fisico = piso(Fuerza * 1.25)
+         * @return dano fisico calculado
          */
         public int calcularDanoFisico() {
             return (int) (Jugador.this.stats.getFuerza() * 1.25);
         }
 
         /**
-         * Calcula el dano del ataque de limite.
+         * Calcula el dano del ataque de limite. Formula: Fuerza * 5.
          *
-         * @return dano limite = Fuerza * 5
+         * @return dano limite calculado
          */
         public int calcularDanoLimite() {
             return Jugador.this.stats.getFuerza() * 5;
         }
 
         /**
-         * Calcula el costo en MP de un hechizo segun cuantas materias de ese elemento hay.
+         * Calcula el costo en MP de un hechizo segun cuantas materias de ese elemento estan equipadas.
+         * Formula: 10 + (5 * n).
          *
          * @param elemento el elemento del hechizo
          * @return costo en MP
@@ -258,10 +264,10 @@ public class Jugador {
         }
 
         /**
-         * Intenta equipar una materia en la espada (maximo 5 ranuras).
+         * Intenta equipar una materia en la espada si hay espacio (maximo 5 ranuras).
          *
          * @param materia la materia a equipar
-         * @return true si se equipo exitosamente, false si no hay espacio
+         * @return true si se equipo exitosamente, false si el arma esta llena
          */
         public boolean equiparMateria(Materia materia) {
             if (this.materiasEquipadas.size() < 5) {
@@ -275,12 +281,18 @@ public class Jugador {
          * Indica si el arma tiene al menos una materia del elemento dado.
          *
          * @param elemento el elemento a consultar
-         * @return true si hay al menos una materia de ese elemento
+         * @return true si hay al menos una materia de ese elemento equipada
          */
         public boolean tieneElemento(Elemento elemento) {
             return contarMateriasElemento(elemento) > 0;
         }
 
+        /**
+         * Cuenta cuantas materias del elemento dado estan equipadas en el arma.
+         *
+         * @param elemento el elemento a contar
+         * @return cantidad de materias de ese elemento
+         */
         private int contarMateriasElemento(Elemento elemento) {
             int c = 0;
             for (Materia m : this.materiasEquipadas) {

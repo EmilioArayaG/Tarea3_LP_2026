@@ -5,28 +5,22 @@ import componentes.Estadisticas;
 import componentes.Vulnerable;
 import java.util.Random;
 
-/**
- * Representa a los enemigos salvajes del mundo: Planta Carnivora,
- * Sapo de la Jungla y Robot Centinela. Implementa Vulnerable para
- * que sus debilidades/resistencias/inmunidades sean evaluadas en combate.
- */
 public class EnemigoSalvaje extends Enemigo implements Vulnerable {
 
-    /** Tipos posibles de enemigo salvaje. */
     public enum Tipo { PLANTA_CARNIVORA, SAPO_JUNGLA, ROBOT_CENTINELA }
 
     private Tipo tipo;
 
     /**
-     * Crea un EnemigoSalvaje del tipo indicado, configurando sus stats y recompensas.
+     * Crea un EnemigoSalvaje del tipo indicado con sus stats, nombre y recompensas aleatorias.
      *
-     * @param tipo el tipo de enemigo a crear
+     * @param tipo el tipo de enemigo a crear (PLANTA_CARNIVORA, SAPO_JUNGLA o ROBOT_CENTINELA)
      */
     public EnemigoSalvaje(Tipo tipo) {
         this.tipo = tipo;
         Random rand = new Random();
-        this.xpRecompensa = rand.nextInt(21) + 80;        // 80-100
-        this.chatarraRecompensa = rand.nextInt(26) + 50;  // 50-75
+        this.xpRecompensa = rand.nextInt(21) + 80;
+        this.chatarraRecompensa = rand.nextInt(26) + 50;
 
         switch (tipo) {
             case PLANTA_CARNIVORA:
@@ -45,11 +39,11 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
     }
 
     /**
-     * Evalua el multiplicador de dano magico segun el elemento recibido.
-     * Debilidades (x2), resistencias (x0.5) e inmunidades (x0) dependen del tipo.
+     * Retorna el multiplicador de dano magico segun el elemento recibido y el tipo de enemigo.
+     * Debilidad x2, neutro x1, resistencia x0.5, inmunidad x0.
      *
      * @param elementoMagia el elemento del ataque magico
-     * @return multiplicador de dano (2.0, 1.0, 0.5 o 0.0)
+     * @return multiplicador de dano
      */
     @Override
     public double evaluarDebilidad(Elemento elementoMagia) {
@@ -65,9 +59,9 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
                 if (elementoMagia == Elemento.FUEGO) return 0.5;
                 return 1.0;
             case ROBOT_CENTINELA:
-                if (elementoMagia == Elemento.RAYO)  return 2.0;
-                if (elementoMagia == Elemento.FISICO) return 0.5;
-                if (elementoMagia == Elemento.HIELO) return 0.5;
+                if (elementoMagia == Elemento.RAYO)   return 2.0;
+                if (elementoMagia == Elemento.FISICO)  return 0.5;
+                if (elementoMagia == Elemento.HIELO)   return 0.5;
                 return 1.0;
             default:
                 return 1.0;
@@ -75,8 +69,7 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
     }
 
     /**
-     * Realiza un ataque fisico al jugador con 85% de precision.
-     * El dano es piso(Fuerza * 1.25).
+     * Ataca al jugador con 85% de precision. El dano es piso(Fuerza * 1.25).
      *
      * @param cloud el jugador que recibe el ataque
      */
@@ -84,12 +77,7 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
     public void atacar(Jugador cloud) {
         Random rand = new Random();
         if (rand.nextInt(100) < 85) {
-            int dano;
-            if (tipo == Tipo.ROBOT_CENTINELA) {
-                dano = (int) (this.stats.getFuerza() * 1.25 * 0.5);
-            } else {
-                dano = (int) (this.stats.getFuerza() * 1.25);
-            }
+            int dano = (int) (this.stats.getFuerza() * 1.25);
             System.out.println(this.nombre + " ataca y causa " + dano + " de dano fisico.");
             cloud.recibirDanio(dano);
         } else {
@@ -98,20 +86,14 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
     }
 
     /**
-     * Retorna la cantidad de chatarra que da este enemigo al ser derrotado.
+     * Retorna la chatarra que suelta este enemigo al ser derrotado.
      *
-     * @return chatarra de recompensa
+     * @return cantidad de chatarra de recompensa
      */
+    @Override
     public int getChatarraRecompensa() {
         return chatarraRecompensa;
     }
 
-    /**
-     * Retorna el tipo de este enemigo salvaje.
-     *
-     * @return tipo del enemigo
-     */
-    public Tipo getTipo() {
-        return tipo;
-    }
+    public Tipo getTipo() { return tipo; }
 }

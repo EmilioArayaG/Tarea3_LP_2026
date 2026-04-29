@@ -3,16 +3,15 @@ package entidades;
 import componentes.Estadisticas;
 import java.util.Random;
 
-/**
- * El jefe final del juego. No implementa Vulnerable: todos los multiplicadores
- * magicos son 1.0. Posee un contador de SuperNova que, al llegar a 10,
- * ejecuta un ataque instantaneo que derrota a Cloud.
- */
 public class Sephiroth extends Enemigo {
 
     private int contadorSuperNova;
 
-    /** Crea a Sephiroth con sus stats fijas (HP 500, Fuerza 40). */
+    /**
+     * Crea a Sephiroth con HP 500, Fuerza 40 y contador de SuperNova en 0.
+     *
+     * @param void
+     */
     public Sephiroth() {
         this.nombre = "Sephiroth";
         this.stats = new Estadisticas(500, 0, 40, 0);
@@ -22,7 +21,7 @@ public class Sephiroth extends Enemigo {
     }
 
     /**
-     * Lanza SuperNova, dejando a Cloud con 0 HP inmediatamente.
+     * Lanza SuperNova, reduciendo el HP de Cloud a 0 de forma instantanea.
      *
      * @param cloud el jugador objetivo
      */
@@ -33,8 +32,8 @@ public class Sephiroth extends Enemigo {
     }
 
     /**
-     * Realiza el turno de Sephiroth: ataque fisico con 90% de precision.
-     * Cada turno incrementa el contadorSuperNova; al llegar a 10 lanza SuperNova.
+     * Realiza el turno de Sephiroth: incrementa el contador de SuperNova y ataca con 90% de precision.
+     * Si el contador llega a 10, ejecuta SuperNova en lugar del ataque normal.
      *
      * @param cloud el jugador que recibe el ataque
      */
@@ -58,13 +57,11 @@ public class Sephiroth extends Enemigo {
     }
 
     /**
-     * Retorna el valor actual del contador de SuperNova.
+     * Reinicia el contador de SuperNova a 0, invocado cuando Cloud ejecuta un ataque Limite.
      *
-     * @return contadorSuperNova (0-10)
+     * @param void
      */
-    public int getContadorSuperNova() {
-        return contadorSuperNova;
-    }
-
     public void resetContadorSuperNova() { this.contadorSuperNova = 0; }
+
+    public int getContadorSuperNova() { return contadorSuperNova; }
 }

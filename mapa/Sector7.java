@@ -11,17 +11,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- * Zona inicial del juego. Permite al jugador entrenarse en el simulador
- * o comprar mejoras en la tienda a cambio de chatarra.
- */
 public class Sector7 extends Zona {
 
     private final List<Mejora> tiendaLocal;
     private final Scanner scanner;
 
     /**
-     * Crea la zona Sector 7 con las tres mejoras disponibles en tienda.
+     * Crea la zona Sector 7 con nivel requerido 1 y las tres mejoras disponibles en tienda.
      *
      * @param scanner Scanner compartido para leer la entrada del usuario
      */
@@ -36,7 +32,7 @@ public class Sector7 extends Zona {
     }
 
     /**
-     * Muestra el menu principal del Sector 7: simulador de combate o tienda.
+     * Muestra el menu principal del Sector 7 y redirige al simulador de combate o a la tienda.
      *
      * @param cloud el jugador que interactua con la zona
      */
@@ -61,6 +57,7 @@ public class Sector7 extends Zona {
 
     /**
      * Genera 1 o 2 EnemigoSimulador aleatoriamente e inicia el combate de entrenamiento.
+     * Si Cloud pierde, queda con 1 HP sin ninguna penalizacion.
      *
      * @param cloud el jugador que entra al simulador
      */
@@ -81,7 +78,7 @@ public class Sector7 extends Zona {
     }
 
     /**
-     * Muestra las mejoras disponibles, descuenta chatarra y aplica el bonus al jugador.
+     * Muestra las mejoras disponibles y permite comprarlas descontando chatarra al jugador.
      *
      * @param cloud el jugador que usa la tienda
      */
@@ -122,10 +119,10 @@ public class Sector7 extends Zona {
     }
 
     /**
-     * Aplica el bonus de una mejora a las estadisticas del jugador segun el stat afectado.
+     * Aplica el bonus de una mejora a las estadisticas base del jugador segun el stat afectado.
      *
-     * @param cloud   el jugador que recibe la mejora
-     * @param mejora  la mejora a aplicar
+     * @param cloud  el jugador que recibe la mejora
+     * @param mejora la mejora a aplicar
      */
     private void aplicarMejora(Jugador cloud, Mejora mejora) {
         switch (mejora.getStatAfectado()) {

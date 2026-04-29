@@ -7,11 +7,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- * Gestiona el bucle de combate por turnos entre Cloud y uno o mas enemigos.
- * Muestra el estado del jugador, ofrece un menu de acciones y alterna turnos
- * hasta que todos los enemigos mueran o Cloud sea derrotado.
- */
 public class Combate {
 
     private final Jugador cloud;
@@ -20,11 +15,11 @@ public class Combate {
     private final Scanner scanner;
 
     /**
-     * Crea una instancia de combate.
+     * Crea una instancia de combate entre Cloud y un grupo de enemigos.
      *
      * @param cloud     el jugador
-     * @param enemigos  lista de enemigos que participan
-     * @param puedeHuir false en NucleoPlaneta (combate obligatorio)
+     * @param enemigos  lista de enemigos que participan en el combate
+     * @param puedeHuir true si se permite huir, false en el combate final
      * @param scanner   Scanner compartido para leer entrada del usuario
      */
     public Combate(Jugador cloud, List<Enemigo> enemigos, boolean puedeHuir, Scanner scanner) {
@@ -35,7 +30,7 @@ public class Combate {
     }
 
     /**
-     * Ejecuta el bucle de combate completo.
+     * Ejecuta el bucle de combate completo alternando turno del jugador y turno de enemigos.
      *
      * @return true si Cloud sobrevivio (gano o huyo), false si fue derrotado
      */
@@ -69,7 +64,7 @@ public class Combate {
     }
 
     /**
-     * Muestra el estado actual de Cloud y de los enemigos vivos.
+     * Muestra el estado actual de Cloud (HP, MP, Limite) y de todos los enemigos vivos.
      */
     private void mostrarEstado() {
         System.out.println("\n--- Estado de " + cloud.getNombre() + " ---");
@@ -88,9 +83,9 @@ public class Combate {
     }
 
     /**
-     * Gestiona el turno del jugador mostrando el menu y ejecutando la accion elegida.
+     * Gestiona el turno del jugador mostrando el menu de acciones y ejecutando la elegida.
      *
-     * @return true si el jugador eligio huir exitosamente
+     * @return true si el jugador huyo exitosamente del combate
      */
     private boolean turnoJugador() {
         Enemigo objetivo = primerEnemigoVivo();
@@ -98,9 +93,9 @@ public class Combate {
 
         System.out.println("\nAcciones:");
         System.out.println("  1) Ataque fisico");
-        if (tieneMagia)                    System.out.println("  2) Magia");
-        if (cloud.getLimiteActual() >= 100) System.out.println("  3) Ataque Limite!");
-        if (puedeHuir)                     System.out.println("  4) Huir");
+        if (tieneMagia)                     System.out.println("  2) Magia");
+        if (cloud.getLimiteActual() >= 100)  System.out.println("  3) Ataque Limite!");
+        if (puedeHuir)                       System.out.println("  4) Huir");
         System.out.print("Elige: ");
 
         String input = scanner.nextLine().trim();
@@ -135,10 +130,10 @@ public class Combate {
     }
 
     /**
-     * Muestra el submenu de materias disponibles y ejecuta el hechizo elegido.
+     * Muestra el submenu de materias equipadas y ejecuta el hechizo o curacion elegida.
      *
      * @param objetivo el enemigo sobre el que se lanza la magia
-     * @return false siempre (la magia no termina el combate)
+     * @return false siempre, la magia no termina el combate
      */
     private boolean menuMagia(Enemigo objetivo) {
         List<Materia> materias = cloud.getBusterSword().getMateriasEquipadas();
@@ -177,7 +172,7 @@ public class Combate {
     /**
      * Intenta huir del combate con 50% de probabilidad de exito.
      *
-     * @return true si Cloud huyo, false si fallo el intento
+     * @return true si Cloud huyo, false si el intento fallo
      */
     private boolean intentarHuir() {
         if (new Random().nextBoolean()) {
@@ -190,8 +185,8 @@ public class Combate {
 
     /**
      * Ejecuta el ataque de los enemigos vivos sobre Cloud.
-     * Si hay 1 enemigo, ataca siempre. Con 2 hay 50% de ataque conjunto;
-     * con 3 hay 33%; si no atacan juntos, ataca solo uno aleatorio.
+     * Con 1 enemigo siempre ataca; con 2 hay 50% de ataque conjunto; con 3 hay 33%.
+     * Si no atacan juntos, solo ataca uno aleatorio.
      */
     private void turnoEnemigos() {
         List<Enemigo> vivos = new ArrayList<>();

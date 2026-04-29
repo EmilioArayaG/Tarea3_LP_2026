@@ -6,14 +6,10 @@ import mapa.Sector7;
 import mapa.Zona;
 import java.util.Scanner;
 
-/**
- * Punto de entrada del juego. Instancia al jugador y las zonas, luego
- * ejecuta el bucle principal de navegacion y gestion del inventario.
- */
 public class Main {
 
     /**
-     * Inicia el juego creando a Cloud, las zonas y el menu principal.
+     * Inicia el juego creando a Cloud, las tres zonas y el bucle principal de navegacion.
      *
      * @param args argumentos de linea de comandos (no utilizados)
      */
@@ -21,9 +17,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Jugador cloud = new Jugador();
 
-        Sector7      sector7      = new Sector7(scanner);
-        Gongaga      gongaga      = new Gongaga(scanner);
-        NucleoPlaneta nucleo      = new NucleoPlaneta(scanner);
+        Sector7       sector7 = new Sector7(scanner);
+        Gongaga       gongaga = new Gongaga(scanner);
+        NucleoPlaneta nucleo  = new NucleoPlaneta(scanner);
 
         System.out.println("╔══════════════════════════════════════╗");
         System.out.println("║       FINAL FANTASY VII — RPG        ║");
@@ -42,18 +38,10 @@ public class Main {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1":
-                    viajarA(cloud, sector7);
-                    break;
-                case "2":
-                    viajarA(cloud, gongaga);
-                    break;
-                case "3":
-                    viajarA(cloud, nucleo);
-                    break;
-                case "4":
-                    menuInventario(cloud, scanner);
-                    break;
+                case "1": viajarA(cloud, sector7); break;
+                case "2": viajarA(cloud, gongaga); break;
+                case "3": viajarA(cloud, nucleo);  break;
+                case "4": menuInventario(cloud, scanner); break;
                 case "5":
                     jugando = false;
                     System.out.println("Hasta la proxima, Cloud.");
@@ -66,7 +54,7 @@ public class Main {
     }
 
     /**
-     * Intenta viajar a la zona indicada, validando el nivel requerido.
+     * Valida el nivel requerido y ejecuta la accion de la zona si Cloud cumple el requisito.
      *
      * @param cloud el jugador que viaja
      * @param zona  la zona de destino
@@ -82,7 +70,7 @@ public class Main {
     }
 
     /**
-     * Menu de gestion de inventario: ver mochila y equipar materias en la Buster Sword.
+     * Muestra la mochila y las materias equipadas, y permite equipar una materia de la mochila al arma.
      *
      * @param cloud   el jugador
      * @param scanner Scanner compartido para leer entrada

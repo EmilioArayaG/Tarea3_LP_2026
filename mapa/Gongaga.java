@@ -11,16 +11,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- * Zona de jungla con nivel requerido 5. Al ingresar hay 30% de encontrar
- * una Materia de elemento aleatorio y 70% de ser emboscado por enemigos salvajes.
- */
 public class Gongaga extends Zona {
 
     private final Scanner scanner;
+    private final List<Materia> poolMaterias;
 
     /**
-     * Crea la zona Gongaga con nivel requerido 5.
+     * Crea la zona Gongaga con nivel requerido 5 e inicializa el pool de materias encontrables.
      *
      * @param scanner Scanner compartido para leer la entrada del usuario
      */
@@ -28,11 +25,16 @@ public class Gongaga extends Zona {
         this.nombre = "Gongaga";
         this.nivelRequerido = 5;
         this.scanner = scanner;
+        this.poolMaterias = new ArrayList<>();
+        this.poolMaterias.add(new Materia("Materia FUEGO", Elemento.FUEGO));
+        this.poolMaterias.add(new Materia("Materia HIELO", Elemento.HIELO));
+        this.poolMaterias.add(new Materia("Materia RAYO",  Elemento.RAYO));
+        this.poolMaterias.add(new Materia("Materia CURA",  Elemento.CURA));
     }
 
     /**
-     * Ejecuta la accion de la zona: 30% probabilidad de encontrar una Materia,
-     * 70% de ser emboscado. Si Cloud muere, pierde mochila y chatarra.
+     * Ejecuta la accion de la zona: 30% de probabilidad de encontrar una Materia,
+     * 70% de ser emboscado por enemigos salvajes. Si Cloud muere, pierde mochila y chatarra.
      *
      * @param cloud el jugador que explora la zona
      */
@@ -55,28 +57,25 @@ public class Gongaga extends Zona {
     }
 
     /**
-     * Genera una Materia con elemento aleatorio (FUEGO, HIELO, RAYO o CURA)
-     * y la agrega a la mochila del jugador.
+     * Selecciona una Materia aleatoria del pool y la agrega a la mochila del jugador.
      *
      * @param cloud el jugador que recoge la materia
      */
     private void encontrarMateria(Jugador cloud) {
-        Elemento[] elementos = { Elemento.FUEGO, Elemento.HIELO, Elemento.RAYO, Elemento.CURA };
-        Elemento elegido = elementos[new Random().nextInt(elementos.length)];
-        Materia nueva = new Materia("Materia " + elegido, elegido);
+        Materia elegida = poolMaterias.get(new Random().nextInt(poolMaterias.size()));
+        Materia nueva = new Materia(elegida.getNombre(), elegida.getElemento());
         cloud.getMochila().add(nueva);
-        System.out.println("Encontraste una Materia de " + elegido + "! Se agrego a tu mochila.");
+        System.out.println("Encontraste una " + nueva.getNombre() + "! Se agrego a tu mochila.");
     }
 
     /**
-     * Genera el grupo de enemigos para la emboscada.
-     * 60% de probabilidad de 1 enemigo, 30% de 2, 10% de 3.
+     * Genera el grupo de enemigos para la emboscada con probabilidades 60/30/10 para 1/2/3 enemigos.
      * Cada enemigo es un EnemigoSalvaje de tipo aleatorio.
      *
      * @param rand instancia de Random a reutilizar
      * @return lista con los enemigos generados
      */
-    private List<Enemigo> generarGrupoEnemigo(Random rand) {
+    public List<Enemigo> generarGrupoEnemigo(Random rand) {
         int roll = rand.nextInt(100);
         int cantidad = (roll < 60) ? 1 : (roll < 90) ? 2 : 3;
 

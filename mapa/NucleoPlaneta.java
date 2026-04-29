@@ -8,31 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Zona final del juego. Requiere nivel 20 y al menos 2 materias equipadas.
- * El combate contra Sephiroth es obligatorio: no se puede huir.
- * La victoria termina el programa.
- */
 public class NucleoPlaneta extends Zona {
 
     private final Scanner scanner;
+    private final int materiasMinamasRequeridas;
 
     /**
-     * Crea la zona Nucleo del Planeta con nivel requerido 20.
+     * Crea la zona Nucleo del Planeta con nivel requerido 20 y minimo 2 materias equipadas.
      *
      * @param scanner Scanner compartido para leer la entrada del usuario
      */
     public NucleoPlaneta(Scanner scanner) {
         this.nombre = "Nucleo del Planeta";
         this.nivelRequerido = 20;
+        this.materiasMinamasRequeridas = 2;
         this.scanner = scanner;
     }
 
     /**
-     * Valida que Cloud cumpla los requisitos (nivel 20 y al menos 2 materias equipadas)
-     * e inicia el combate final contra Sephiroth sin posibilidad de huir.
-     * Si Cloud gana, imprime el mensaje final y termina el programa.
-     * Si Cloud muere, pierde mochila y chatarra.
+     * Valida los requisitos de acceso (nivel 20 y al menos 2 materias equipadas) e inicia
+     * el combate final contra Sephiroth sin posibilidad de huir.
+     * Si Cloud gana imprime el mensaje de victoria y termina el programa.
+     * Si Cloud muere aplica la penalizacion de muerte.
      *
      * @param cloud el jugador que enfrenta el combate final
      */
@@ -47,9 +44,9 @@ public class NucleoPlaneta extends Zona {
         }
 
         int materiasEquipadas = cloud.getBusterSword().getMateriasEquipadas().size();
-        if (materiasEquipadas < 2) {
-            System.out.println("Necesitas al menos 2 materias equipadas. (Equipadas: "
-                    + materiasEquipadas + ")");
+        if (materiasEquipadas < materiasMinamasRequeridas) {
+            System.out.println("Necesitas al menos " + materiasMinamasRequeridas
+                    + " materias equipadas. (Equipadas: " + materiasEquipadas + ")");
             return;
         }
 
@@ -59,7 +56,7 @@ public class NucleoPlaneta extends Zona {
         scanner.nextLine();
 
         Sephiroth sephiroth = new Sephiroth();
-        List<entidades.Enemigo> grupo = new ArrayList<>();
+        List<Enemigo> grupo = new ArrayList<>();
         grupo.add(sephiroth);
 
         Combate combate = new Combate(cloud, grupo, false, scanner);

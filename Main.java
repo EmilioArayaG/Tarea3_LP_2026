@@ -1,10 +1,10 @@
 import componentes.Materia;
 import entidades.Jugador;
+import java.util.Scanner;
 import mapa.Gongaga;
 import mapa.NucleoPlaneta;
 import mapa.Sector7;
 import mapa.Zona;
-import java.util.Scanner;
 
 public class Main {
 
@@ -21,9 +21,8 @@ public class Main {
         Gongaga       gongaga = new Gongaga(scanner);
         NucleoPlaneta nucleo  = new NucleoPlaneta(scanner);
 
-        System.out.println("╔══════════════════════════════════════╗");
-        System.out.println("║       FINAL FANTASY VII — RPG        ║");
-        System.out.println("╚══════════════════════════════════════╝");
+        System.out.println("  ==   FINAL FANTASY VII — RPG   ==  ");
+
 
         boolean jugando = true;
         while (jugando) {
@@ -44,7 +43,7 @@ public class Main {
                 case "4": menuInventario(cloud, scanner); break;
                 case "5":
                     jugando = false;
-                    System.out.println("Hasta la proxima, Cloud.");
+                    System.out.println("Chao, Cloud.");
                     break;
                 default:
                     System.out.println("Opcion invalida.");

@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class NucleoPlaneta extends Zona {
 
     private final Scanner scanner;
-    private final int materiasMinamasRequeridas;
+    private final int materiasMinRequeridas;
 
     /**
      * Crea la zona Nucleo del Planeta con nivel requerido 20 y minimo 2 materias equipadas.
@@ -21,7 +21,7 @@ public class NucleoPlaneta extends Zona {
     public NucleoPlaneta(Scanner scanner) {
         this.nombre = "Nucleo del Planeta";
         this.nivelRequerido = 20;
-        this.materiasMinamasRequeridas = 2;
+        this.materiasMinRequeridas = 2;
         this.scanner = scanner;
     }
 
@@ -44,8 +44,8 @@ public class NucleoPlaneta extends Zona {
         }
 
         int materiasEquipadas = cloud.getBusterSword().getMateriasEquipadas().size();
-        if (materiasEquipadas < materiasMinamasRequeridas) {
-            System.out.println("Necesitas al menos " + materiasMinamasRequeridas
+        if (materiasEquipadas < materiasMinRequeridas) {
+            System.out.println("Necesitas al menos " + materiasMinRequeridas
                     + " materias equipadas. (Equipadas: " + materiasEquipadas + ")");
             return;
         }
@@ -59,7 +59,7 @@ public class NucleoPlaneta extends Zona {
         List<Enemigo> grupo = new ArrayList<>();
         grupo.add(sephiroth);
 
-        Combate combate = new Combate(cloud, grupo, false, scanner);
+        Combate combate = new Combate(cloud, grupo, false, scanner, false);
         boolean sobrevivio = combate.iniciar();
 
         if (sobrevivio) {

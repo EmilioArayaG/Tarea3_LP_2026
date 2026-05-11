@@ -5,7 +5,7 @@ import entidades.Jugador;
 import java.util.List;
 
 public abstract class Zona {
-    public String nombre;
+    protected String nombre;
     protected int nivelRequerido;
     protected List<Enemigo> enemigosDisponibles;
 

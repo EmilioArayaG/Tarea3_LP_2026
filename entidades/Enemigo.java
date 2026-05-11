@@ -24,6 +24,15 @@ public abstract class Enemigo {
         cloud.recibirXP(this.xpRecompensa);
     }
 
+    /**
+     * Entrega la recompensa de chatarra del enemigo al jugador.
+     *
+     * @param cloud el jugador que recibe la chatarra
+     */
+    public void giveChatarraRecompensa(Jugador cloud) {
+        cloud.recibirChatarra(this.chatarraRecompensa);
+    }
+
     public String getNombre()              { return nombre; }
     public Estadisticas getStats()         { return stats; }
     public int getXpRecompensa()           { return xpRecompensa; }

@@ -69,11 +69,11 @@ public class Sector7 extends Zona {
             grupo.add(new EnemigoSimulador());
         }
         System.out.println("\nEntrando al simulador con " + cantidad + " enemigo(s)...");
-        Combate combate = new Combate(cloud, grupo, true, scanner);
+        Combate combate = new Combate(cloud, grupo, true, scanner, true);
         boolean sobrevivio = combate.iniciar();
         if (!sobrevivio) {
             cloud.getStats().setHpActual(1);
-            System.out.println("El simulador termina. Cloud queda con 1 HP, sin penalización.");
+            System.out.println("El simulador termina. ");
         }
     }
 

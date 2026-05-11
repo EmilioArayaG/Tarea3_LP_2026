@@ -12,21 +12,24 @@ public class Combate {
     private final Jugador cloud;
     private final List<Enemigo> enemigos;
     private final boolean puedeHuir;
+    private final boolean esSimulador;
     private final Scanner scanner;
 
     /**
      * Crea una instancia de combate entre Cloud y un grupo de enemigos.
      *
-     * @param cloud     el jugador
-     * @param enemigos  lista de enemigos que participan en el combate
-     * @param puedeHuir true si se permite huir, false en el combate final
-     * @param scanner   Scanner compartido para leer entrada del usuario
+     * @param cloud        el jugador
+     * @param enemigos     lista de enemigos que participan en el combate
+     * @param puedeHuir    true si se permite huir, false en el combate final
+     * @param scanner      Scanner compartido para leer entrada del usuario
+     * @param esSimulador  true si el combate ocurre en el simulador del Sector 7
      */
-    public Combate(Jugador cloud, List<Enemigo> enemigos, boolean puedeHuir, Scanner scanner) {
+    public Combate(Jugador cloud, List<Enemigo> enemigos, boolean puedeHuir, Scanner scanner, boolean esSimulador) {
         this.cloud = cloud;
         this.enemigos = enemigos;
         this.puedeHuir = puedeHuir;
         this.scanner = scanner;
+        this.esSimulador = esSimulador;
     }
 
     /**
@@ -52,6 +55,11 @@ public class Combate {
 
             if (cloud.getStats().getHpActual() <= 0) {
                 System.out.println("\nCloud ha sido derrotado... :(");
+                return false;
+            }
+
+            if (esSimulador && cloud.getStats().getHpActual() == 1 && hayEnemigosVivos()) {
+                System.out.println("\nCloud no puede seguir en el simulador...");
                 return false;
             }
         }

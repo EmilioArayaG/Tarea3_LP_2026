@@ -48,7 +48,7 @@ public class Gongaga extends Zona {
         } else {
             System.out.println("Emboscada! Los enemigos te atacan!");
             List<Enemigo> grupo = generarGrupoEnemigo(rand);
-            Combate combate = new Combate(cloud, grupo, true, scanner);
+            Combate combate = new Combate(cloud, grupo, true, scanner, false);
             boolean sobrevivio = combate.iniciar();
             if (!sobrevivio) {
                 cloud.morir();

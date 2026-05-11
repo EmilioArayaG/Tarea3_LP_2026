@@ -18,6 +18,18 @@ public class EnemigoSimulador extends Enemigo {
     }
 
     /**
+     * Verifica si el dano calculado dejaria a Cloud con 1 HP o menos, devolviendo false en ese caso.
+     * Se usa para garantizar que el simulador nunca mate al jugador.
+     *
+     * @param cloud el jugador a verificar
+     * @return true si el ataque es seguro (Cloud quedaria con mas de 1 HP), false si no
+     */
+    public boolean checkDanoSeguro(Jugador cloud) {
+        int dano = (int) (this.stats.getFuerza() * 1.25);
+        return cloud.getStats().getHpActual() - dano > 1;
+    }
+
+    /**
      * Ataca al jugador con 85% de precision. El dano es piso(Fuerza * 1.25).
      * Nunca reduce el HP de Cloud por debajo de 1.
      *
@@ -28,7 +40,7 @@ public class EnemigoSimulador extends Enemigo {
         Random rand = new Random();
         if (rand.nextInt(100) < 85) {
             int dano = (int) (this.stats.getFuerza() * 1.25);
-            if (cloud.getStats().getHpActual() - dano <= 0) {
+            if (!checkDanoSeguro(cloud)) {
                 dano = cloud.getStats().getHpActual() - 1;
             }
             System.out.println(this.nombre + " ataca y causa " + dano + " de dano.");

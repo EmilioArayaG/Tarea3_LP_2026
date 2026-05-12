@@ -11,7 +11,7 @@ El archivo principal del programa es "Main.java", y el codigo esta organizado en
  - entidades/    : Jugador (Cloud), Enemigo, EnemigoSalvaje, EnemigoSimulador y Sephiroth.
  - mapa/         : la clase abstracta Zona y las tres zonas del juego (Sector7, Gongaga, NucleoPlaneta).
 
-Instrucciones de uso:
+Instrucciones de compilacion:
 -Para que el programa funcione hay que tener todos los archivos .java de los paquetes "componentes", "entidades" y "mapa", junto al "Main.java" y al "makefile" en la misma carpeta. Es importante mantener la estructura de carpetas tal cual esta en la carpeta, sino el compilador no encuentra las clases.
 
 -El programa se desarrollo y se probo con Java 11 (en vscode), pero deberia funcionar con cualquier version de Java 11 o superior. Se recomienda usar esa version para asegurar que todo corra bien.

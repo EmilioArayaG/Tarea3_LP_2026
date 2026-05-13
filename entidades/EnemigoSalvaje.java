@@ -3,6 +3,7 @@ package entidades;
 import componentes.Elemento;
 import componentes.Estadisticas;
 import componentes.Vulnerable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -31,23 +32,23 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
             case PLANTA_CARNIVORA:
                 this.nombre = "Planta Carnivora";
                 this.stats = new Estadisticas(80, 0, 15, 0);
-                this.debilidades  = Arrays.asList(Elemento.FUEGO, Elemento.HIELO);
-                this.inmunidades  = Arrays.asList(Elemento.RAYO);
-                this.resistencias = Arrays.asList();
+                this.debilidades  = new ArrayList<>(Arrays.asList(Elemento.FUEGO, Elemento.HIELO));
+                this.inmunidades  = new ArrayList<>(Arrays.asList(Elemento.RAYO));
+                this.resistencias = new ArrayList<>();
                 break;
             case SAPO_JUNGLA:
                 this.nombre = "Sapo de la Jungla";
                 this.stats = new Estadisticas(60, 0, 12, 0);
-                this.debilidades  = Arrays.asList(Elemento.RAYO, Elemento.HIELO);
-                this.resistencias = Arrays.asList(Elemento.FUEGO);
-                this.inmunidades  = Arrays.asList();
+                this.debilidades  = new ArrayList<>(Arrays.asList(Elemento.RAYO, Elemento.HIELO));
+                this.resistencias = new ArrayList<>(Arrays.asList(Elemento.FUEGO));
+                this.inmunidades  = new ArrayList<>();
                 break;
             case ROBOT_CENTINELA:
                 this.nombre = "Robot Centinela";
                 this.stats = new Estadisticas(100, 0, 20, 0);
-                this.debilidades  = Arrays.asList(Elemento.RAYO);
-                this.resistencias = Arrays.asList(Elemento.FISICO, Elemento.HIELO);
-                this.inmunidades  = Arrays.asList();
+                this.debilidades  = new ArrayList<>(Arrays.asList(Elemento.RAYO));
+                this.resistencias = new ArrayList<>(Arrays.asList(Elemento.FISICO, Elemento.HIELO));
+                this.inmunidades  = new ArrayList<>();
                 break;
         }
     }

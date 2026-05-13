@@ -21,7 +21,7 @@ public class Main {
         Gongaga       gongaga = new Gongaga(scanner);
         NucleoPlaneta nucleo  = new NucleoPlaneta(scanner);
 
-        System.out.println("  ==   FINAL FANTASY VII — RPG   ==  ");
+        System.out.println("  ==   FINAL FANTASY VII  ==  ");
 
 
         boolean jugando = true;

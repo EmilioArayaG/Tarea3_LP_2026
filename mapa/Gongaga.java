@@ -40,7 +40,7 @@ public class Gongaga extends Zona {
      */
     @Override
     public void accionZona(Jugador cloud) {
-        System.out.println("\n=== GONGAGA — JUNGLA SALVAJE ===");
+        System.out.println("\n=== GONGAGA-JUNGLA SALVAJE ===");
         Random rand = new Random();
 
         if (rand.nextInt(100) < 30) {

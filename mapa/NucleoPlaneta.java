@@ -62,8 +62,7 @@ public class NucleoPlaneta extends Zona {
         boolean sobrevivio = combate.iniciar();
 
         if (sobrevivio) {
-            System.out.println("\n========================");
-            System.out.println("         Victoria!      ");
+            System.out.println("\n============ Fin Del Juego! ============");
             System.exit(0);
         } else {
             cloud.morir();

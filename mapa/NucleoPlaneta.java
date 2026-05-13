@@ -54,6 +54,17 @@ public class NucleoPlaneta extends Zona {
         System.out.print("Presiona ENTER para comenzar el combate final...");
         scanner.nextLine();
 
+        this.iniciarCombate(cloud);
+    }
+
+    /**
+     * Instancia a Sephiroth, crea el combate final sin posibilidad de huir y lo ejecuta.
+     * Si Cloud gana termina el programa con System.exit(0).
+     * Si Cloud pierde aplica la penalizacion de muerte llamando a cloud.morir().
+     *
+     * @param cloud el jugador que enfrenta el combate final contra Sephiroth
+     */
+    public void iniciarCombate(Jugador cloud) {
         Sephiroth sephiroth = new Sephiroth();
         List<Enemigo> grupo = new ArrayList<>();
         grupo.add(sephiroth);

@@ -3,6 +3,8 @@ package entidades;
 import componentes.Elemento;
 import componentes.Estadisticas;
 import componentes.Vulnerable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class EnemigoSalvaje extends Enemigo implements Vulnerable {
@@ -10,6 +12,9 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
     public enum Tipo { PLANTA_CARNIVORA, SAPO_JUNGLA, ROBOT_CENTINELA }
 
     private Tipo tipo;
+    private List<Elemento> debilidades;
+    private List<Elemento> resistencias;
+    private List<Elemento> inmunidades;
 
     /**
      * Crea un EnemigoSalvaje del tipo indicado con sus stats, nombre y recompensas aleatorias.
@@ -26,14 +31,23 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
             case PLANTA_CARNIVORA:
                 this.nombre = "Planta Carnivora";
                 this.stats = new Estadisticas(80, 0, 15, 0);
+                this.debilidades  = Arrays.asList(Elemento.FUEGO, Elemento.HIELO);
+                this.inmunidades  = Arrays.asList(Elemento.RAYO);
+                this.resistencias = Arrays.asList();
                 break;
             case SAPO_JUNGLA:
                 this.nombre = "Sapo de la Jungla";
                 this.stats = new Estadisticas(60, 0, 12, 0);
+                this.debilidades  = Arrays.asList(Elemento.RAYO, Elemento.HIELO);
+                this.resistencias = Arrays.asList(Elemento.FUEGO);
+                this.inmunidades  = Arrays.asList();
                 break;
             case ROBOT_CENTINELA:
                 this.nombre = "Robot Centinela";
                 this.stats = new Estadisticas(100, 0, 20, 0);
+                this.debilidades  = Arrays.asList(Elemento.RAYO);
+                this.resistencias = Arrays.asList(Elemento.FISICO, Elemento.HIELO);
+                this.inmunidades  = Arrays.asList();
                 break;
         }
     }
@@ -47,25 +61,10 @@ public class EnemigoSalvaje extends Enemigo implements Vulnerable {
      */
     @Override
     public double evaluarDebilidad(Elemento elementoMagia) {
-        switch (tipo) {
-            case PLANTA_CARNIVORA:
-                if (elementoMagia == Elemento.FUEGO) return 2.0;
-                if (elementoMagia == Elemento.HIELO) return 2.0;
-                if (elementoMagia == Elemento.RAYO)  return 0.0;
-                return 1.0;
-            case SAPO_JUNGLA:
-                if (elementoMagia == Elemento.RAYO)  return 2.0;
-                if (elementoMagia == Elemento.HIELO) return 2.0;
-                if (elementoMagia == Elemento.FUEGO) return 0.5;
-                return 1.0;
-            case ROBOT_CENTINELA:
-                if (elementoMagia == Elemento.RAYO)   return 2.0;
-                if (elementoMagia == Elemento.FISICO)  return 0.5;
-                if (elementoMagia == Elemento.HIELO)   return 0.5;
-                return 1.0;
-            default:
-                return 1.0;
-        }
+        if (debilidades.contains(elementoMagia))  return 2.0;
+        if (inmunidades.contains(elementoMagia))  return 0.0;
+        if (resistencias.contains(elementoMagia)) return 0.5;
+        return 1.0;
     }
 
     /**

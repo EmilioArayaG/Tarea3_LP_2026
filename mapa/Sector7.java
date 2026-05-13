@@ -61,7 +61,7 @@ public class Sector7 extends Zona {
      *
      * @param cloud el jugador que entra al simulador
      */
-    private void iniciarSimulador(Jugador cloud) {
+    public void iniciarSimulador(Jugador cloud) {
         Random rand = new Random();
         int cantidad = rand.nextBoolean() ? 1 : 2;
         List<Enemigo> grupo = new ArrayList<>();
@@ -82,7 +82,7 @@ public class Sector7 extends Zona {
      *
      * @param cloud el jugador que usa la tienda
      */
-    private void abrirTienda(Jugador cloud) {
+    public void abrirTienda(Jugador cloud) {
         System.out.println("\n=== TIENDA DE MEJORAS === (Chatarra: " + cloud.getChatarra() + ")");
         for (int i = 0; i < tiendaLocal.size(); i++) {
             Mejora m = tiendaLocal.get(i);

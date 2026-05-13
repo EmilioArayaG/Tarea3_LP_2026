@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class NucleoPlaneta extends Zona {
 
     private final Scanner scanner;
-    private final int materiasMinRequeridas;
+    private final int materiasMinimasRequeridas;
 
     /**
      * Crea la zona Nucleo del Planeta con nivel requerido 20 y minimo 2 materias equipadas.
@@ -21,7 +21,7 @@ public class NucleoPlaneta extends Zona {
     public NucleoPlaneta(Scanner scanner) {
         this.nombre = "Nucleo del Planeta";
         this.nivelRequerido = 20;
-        this.materiasMinRequeridas = 2;
+        this.materiasMinimasRequeridas = 2;
         this.scanner = scanner;
     }
 
@@ -44,9 +44,8 @@ public class NucleoPlaneta extends Zona {
         }
 
         int materiasEquipadas = cloud.getBusterSword().getMateriasEquipadas().size();
-        if (materiasEquipadas < materiasMinRequeridas) {
-            System.out.println("Necesitas al menos " + materiasMinRequeridas
-                    + " materias equipadas. (Equipadas: " + materiasEquipadas + ")");
+        if (materiasEquipadas < materiasMinimasRequeridas) {
+            System.out.println("Necesitas al menos " + materiasMinimasRequeridas + " materias equipadas. (Equipadas: " + materiasEquipadas + ")");
             return;
         }
 
@@ -63,14 +62,8 @@ public class NucleoPlaneta extends Zona {
         boolean sobrevivio = combate.iniciar();
 
         if (sobrevivio) {
-            System.out.println("\n╔══════════════════════════════════════╗");
-            System.out.println("║         FINAL FANTASY VII            ║");
-            System.out.println("║                                      ║");
-            System.out.println("║  Cloud derroto a Sephiroth.          ║");
-            System.out.println("║  El Planeta esta a salvo.            ║");
-            System.out.println("║                                      ║");
-            System.out.println("║          FIN DEL JUEGO               ║");
-            System.out.println("╚══════════════════════════════════════╝");
+            System.out.println("\n========================");
+            System.out.println("         Victoria!      ");
             System.exit(0);
         } else {
             cloud.morir();

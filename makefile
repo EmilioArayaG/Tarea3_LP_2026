@@ -1,5 +1,5 @@
 JAVAC = javac
-SRC = $(shell find . -name "*.java" ! -name "Gongarga.java" ! -name "main.java")
+SRC = $(shell find . -name "*.java")
 OUT = out
 
 all:
